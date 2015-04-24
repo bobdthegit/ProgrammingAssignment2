@@ -1,15 +1,36 @@
-## Put comments here that give an overall description of what your
-## functions do
+## These two functions invert a matrix and cache the result.  
+##  If cacheSolve is called a second time on the same matrix, 
+##instead of rerunning solve it retrieves the cached inverse.
 
-## Write a short comment describing this function
+## makeCacheMatrix creates four functions that will become available
+## along with the original matrix  in the calling environment (which will be cacheSolve).  
 
-makeCacheMatrix <- function(x = matrix()) {
 
+
+makeCacheMatrix <-function(x = matrix()) {
+  invMatClone <- NULL
+    set <- function(y){  
+      x <<- y
+      invMatClone <<- NULL
+    }
+    get <- function() x
+    setInv <- function(solve) invMatClone <<- solve 
+    ##setInv is a function of the function "solve" such that invMat (in this environment) 
+    ##gets the result of "solve" (??)  Unclear why this doesn't run "solve" a second time.
+    
+    getInv<-function() invMatClone
+  list(set=set,get=get,setInv=setInv,getInv=getInv)
 }
-
-
-## Write a short comment describing this function
-
-cacheSolve <- function(x, ...) {
-        ## Return a matrix that is the inverse of 'x'
+cacheSolve<-function(x, ...) {
+  ## Return a matrix that is the inverse of the matrix in "x"'
+  invMat<-x$getInv()  #refers to the getInv fn that is in the list x and gets invMat from there
+  if(!is.null(invMat)){
+    message("getting cached data")
+    return(invMat)    
+  }
+  data <- x$get()  #No inverse yet, so get  the original matrix.
+  
+  invMat <- solve(data,...)
+  x$setInv(invMat)
+  invMat
 }
