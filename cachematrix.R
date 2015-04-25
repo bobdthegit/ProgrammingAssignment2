@@ -9,14 +9,13 @@
 
 makeCacheMatrix <-function(x = matrix()) {
   invMatClone <- NULL
-    set <- function(y){  
+    set <- function(y){   #not used
       x <<- y
       invMatClone <<- NULL
     }
     get <- function() x
-    setInv <- function(solve) invMatClone <<- solve 
-    ##setInv is a function of the function "solve" such that invMat (in this environment) 
-    ##gets the result of "solve" (??)  Unclear why this doesn't run "solve" a second time.
+    setInv <- function(foo) invMatClone <<- foo 
+    ##passes its argument (in cacheSolve)to invMatClone in this environment
     
     getInv<-function() invMatClone
   list(set=set,get=get,setInv=setInv,getInv=getInv)
